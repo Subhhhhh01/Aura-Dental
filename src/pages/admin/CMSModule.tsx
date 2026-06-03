@@ -16,6 +16,7 @@ export default function CMSModule() {
   const [editingDoctorId, setEditingDoctorId] = useState<number | null>(null);
   const [newDoctor, setNewDoctor] = useState<Partial<Doctor>>({});
   const doctorFileInputRef = useRef<HTMLInputElement>(null);
+  const serviceFileInputRef = useRef<HTMLInputElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,6 +32,7 @@ export default function CMSModule() {
         name: newService.name || '',
         description: newService.description || '',
         price: newService.price || '',
+        image: newService.image || '',
         status: newService.status || 'Active'
       } as Service]);
       setNewService({});
@@ -120,6 +122,19 @@ const compressImage = (file: File, callback: (dataUrl: string) => void) => {
     }
   };
 
+  const handleServiceImageUpload = (e: React.ChangeEvent<HTMLInputElement>, id?: number) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      compressImage(file, (dataUrl) => {
+        if (id) {
+          handleUpdateService(id, 'image', dataUrl);
+        } else {
+          setNewService({ ...newService, image: dataUrl });
+        }
+      });
+    }
+  };
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -167,22 +182,47 @@ const compressImage = (file: File, callback: (dataUrl: string) => void) => {
       {/* Services Manager */}
       {activeTab === 'services' && (
         <div className="space-y-4">
+          <input 
+            type="file" 
+            accept="image/*" 
+            className="hidden" 
+            ref={serviceFileInputRef}
+            onChange={(e) => handleServiceImageUpload(e, editingServiceId || undefined)}
+          />
+
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
             <h3 className="font-bold text-sm text-slate-700">Add New Service</h3>
-            <input 
-              type="text" 
-              placeholder="Service Name" 
-              value={newService.name || ''} 
-              onChange={e => setNewService({...newService, name: e.target.value})}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
-            />
-            <input 
-              type="text" 
-              placeholder="Short Description" 
-              value={newService.description || ''} 
-              onChange={e => setNewService({...newService, description: e.target.value})}
-              className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
-            />
+            <div className="flex gap-4 items-start">
+              <button 
+                onClick={() => { setEditingServiceId(null); serviceFileInputRef.current?.click(); }}
+                className="w-20 h-20 rounded-xl bg-slate-200 border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 hover:text-primary-600 hover:border-primary-500 overflow-hidden"
+              >
+                {newService.image ? (
+                  <img src={newService.image} alt="Service" className="w-full h-full object-cover" />
+                ) : (
+                  <>
+                    <ImageIcon className="w-6 h-6 mb-1" />
+                    <span className="text-[10px] font-bold">Image</span>
+                  </>
+                )}
+              </button>
+              <div className="flex-1 space-y-3">
+                <input 
+                  type="text" 
+                  placeholder="Service Name" 
+                  value={newService.name || ''} 
+                  onChange={e => setNewService({...newService, name: e.target.value})}
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                />
+                <input 
+                  type="text" 
+                  placeholder="Short Description" 
+                  value={newService.description || ''} 
+                  onChange={e => setNewService({...newService, description: e.target.value})}
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+                />
+              </div>
+            </div>
             <div className="flex gap-2">
               <input 
                 type="text" 
@@ -211,7 +251,26 @@ const compressImage = (file: File, callback: (dataUrl: string) => void) => {
           <div className="space-y-3">
             {services.map((service) => (
               <div key={service.id} className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col gap-3">
-                <div className="flex justify-between items-start gap-2">
+                <div className="flex justify-between items-start gap-4">
+                  <div className="relative group shrink-0">
+                    <div className="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden border border-slate-200 flex items-center justify-center relative">
+                      {service.image ? (
+                        <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <ImageIcon className="w-6 h-6 text-slate-300" />
+                      )}
+                      
+                      {editingServiceId === service.id && (
+                        <button
+                          onClick={() => { setEditingServiceId(service.id); serviceFileInputRef.current?.click(); }}
+                          className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <UploadCloud className="w-4 h-4 mb-1" />
+                          <span className="text-[8px] uppercase tracking-wider font-bold">Upload</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex-1">
                     {editingServiceId === service.id ? (
                       <input 

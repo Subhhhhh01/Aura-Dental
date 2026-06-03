@@ -15,7 +15,7 @@ const doctorSchema = new mongoose.Schema({
   id: Number, name: String, role: String, exp: String, image: String, bio: String, status: String
 });
 const serviceSchema = new mongoose.Schema({
-  id: Number, name: String, description: String, price: String, status: String
+  id: Number, name: String, description: String, price: String, status: String, image: String
 });
 const imageSchema = new mongoose.Schema({
   id: Number, url: String, beforeUrl: String, afterUrl: String, type: String, label: String

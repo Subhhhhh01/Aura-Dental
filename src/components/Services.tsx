@@ -46,8 +46,12 @@ export default function Services() {
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 className="group bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-primary-100/50 transition-all duration-300 flex flex-col"
               >
-                <div className={`w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-7 h-7 text-primary-500" />
+                <div className={`w-14 h-14 rounded-2xl overflow-hidden bg-primary-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  {service.image ? (
+                    <img src={service.image} alt={service.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <Icon className="w-7 h-7 text-primary-500" />
+                  )}
                 </div>
                 <h3 className="text-xl font-serif font-bold text-slate-800 mb-2">{service.name}</h3>
                 <span className="text-primary-600 font-bold text-sm mb-4">{service.price}</span>
@@ -90,8 +94,10 @@ export default function Services() {
                 <X className="w-5 h-5" />
               </button>
               
-              <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center mb-6">
-                {(() => {
+              <div className="w-14 h-14 rounded-2xl overflow-hidden bg-primary-50 flex items-center justify-center mb-6">
+                {selectedService.image ? (
+                  <img src={selectedService.image} alt={selectedService.name} className="w-full h-full object-cover" />
+                ) : (() => {
                   const Icon = getIconForService(selectedService.name);
                   return <Icon className="w-7 h-7 text-primary-500" />;
                 })()}
