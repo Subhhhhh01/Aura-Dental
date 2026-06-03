@@ -113,7 +113,7 @@ export default function Services() {
               <button 
                 onClick={() => {
                   setSelectedService(null);
-                  document.getElementById('appointment')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('book')?.scrollIntoView({ behavior: 'smooth' });
                 }}
                 className="w-full py-4 bg-slate-900 hover:bg-primary-600 text-white rounded-xl text-sm font-bold tracking-wider transition-colors duration-300 shadow-lg shadow-slate-900/20"
               >

@@ -62,10 +62,10 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-bold mb-6 font-serif">Quick Links</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/services" className="hover:text-primary-400 transition">Our Services</Link></li>
-              <li><Link to="/doctors" className="hover:text-primary-400 transition">Meet the Team</Link></li>
-              <li><Link to="/gallery" className="hover:text-primary-400 transition">Before & After</Link></li>
-              <li><Link to="/book" className="hover:text-primary-400 transition">Book Appointment</Link></li>
+              <li><Link to="/services" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-primary-400 transition">Our Services</Link></li>
+              <li><Link to="/doctors" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-primary-400 transition">Meet the Team</Link></li>
+              <li><Link to="/gallery" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-primary-400 transition">Before & After</Link></li>
+              <li><Link to="/book" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-primary-400 transition">Book Appointment</Link></li>
             </ul>
           </div>
         </div>
